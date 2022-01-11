@@ -1,0 +1,16 @@
+.modal-enter {
+    opacity: 0;
+}
+.modal-etner-active {
+    opacity: 1;
+    transition: opacity 200ms;
+}
+
+.modal-exit {
+    opacity: 1;
+}
+
+.modal-exit-actvie {
+    opacity: 0;
+    transition: opacity 200ms;
+}
