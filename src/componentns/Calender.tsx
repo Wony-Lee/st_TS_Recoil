@@ -3,6 +3,9 @@ import styled from "@emotion/styled/macro";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 import { isSameDay } from "../utils/date";
+import { selectedDateState, todoListState } from "../features/TodoList/atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import CalendarDay from "./CalendarDay";
 
 const Header = styled.div`
     width: 100%;
@@ -112,7 +115,9 @@ const MONTHS = [
 ]; // 달
 
 const Calendar: React.FC = () => {
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date()); // 선택한 날짜
+    const selectedDate = useRecoilValue(selectedDateState);
+    const todoList = useRecoilValue(todoListState);
+    const setSelectedDate = useSetRecoilState(selectedDateState);
 
     const { year, month, firstDay, lastDay } = useMemo(() => {
         // 선택한 날을 기준으로 첫째 날, 마지막 날, 년, 월 계
@@ -141,18 +146,8 @@ const Calendar: React.FC = () => {
         [...Array(lastDay.getDate()).keys()].map((d: number) => {
             // 1일 부터 마지막 날까지 날짜 표기
             const thisDay = new Date(year, month, d + 1);
-            const today = new Date();
 
-            return (
-                <TableData key={d} onClick={() => selectDate(thisDay)}>
-                    <DisplayDate
-                        isSelected={isSameDay(selectedDate, thisDay)}
-                        isToday={isSameDay(today, thisDay)}
-                    >
-                        {new Date(year, month, d + 1).getDate()}
-                    </DisplayDate>
-                </TableData>
-            );
+            return <CalendarDay date={thisDay} />;
         });
 
     const render = () => {

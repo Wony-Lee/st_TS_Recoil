@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useRecoilValue, useRecoilState, useRecoilCallback } from "recoil";
 import { selectedDateState, todoListState } from "../TodoList/atom";
 import { todoFormModalOpenState } from "./atom";
+import { getSimpleDateFormat } from "../../utils/date";
 
 const ModalBody = styled.div`
     width: 100vw;
@@ -57,7 +58,7 @@ const TodoFormModal: React.FC = () => {
                     id: uuidv4(),
                     content: todo,
                     done: false,
-                    date: selectedDateState,
+                    date: selectedDate,
                 };
                 set(todoListState, [...todoList, newTodo]);
             },
@@ -81,7 +82,7 @@ const TodoFormModal: React.FC = () => {
         <Modal isOpen={isOpen} onClose={handleClose}>
             <ModalBody>
                 <Card>
-                    <Date>{selectedDate}</Date>
+                    <Date>{getSimpleDateFormat(selectedDate)}</Date>
                     <InputTodo
                         placeholder="새로운 이벤트"
                         onKeyPress={handleKeyPress}

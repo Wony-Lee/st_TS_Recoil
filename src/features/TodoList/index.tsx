@@ -1,6 +1,10 @@
 import React from "react";
 import styled from "@emotion/styled/macro";
-import { Todo } from "./atom";
+
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
+import { selectedTodoState, Todo } from "./atom";
+import { todoStatisticsModalOpenState } from "../TodoStatisticsModal/atom";
 
 const TodoItem = styled.li<{ done?: boolean; selected?: boolean }>`
     max-width: 100px;
@@ -47,16 +51,45 @@ interface Props {
 }
 
 const TodoList: React.FC<Props> = ({ items }) => {
+    const selectedTodo = useRecoilValue(selectedTodoState);
+    const setSelectedTodo = useSetRecoilState(selectedTodoState);
+    const setTodoStateisticsModalOpen = useSetRecoilState(
+        todoStatisticsModalOpenState
+    );
+    const handleClick = (
+        e: React.SyntheticEvent<HTMLLIElement>,
+        todo: Todo
+    ) => {
+        e.stopPropagation();
+
+        setSelectedTodo(
+            selectedTodo?.id === todo.id && selectedTodo.date === todo.date
+                ? null
+                : todo
+        );
+    };
+    const handleTodoStaticsModalOpen = (
+        e: React.SyntheticEvent<HTMLLIElement>
+    ) => {
+        e.stopPropagation();
+        setTodoStateisticsModalOpen(true);
+    };
     return (
         <Base>
             <TodoItem>
                 {items.slice(0, 3).map((item, idx) => (
-                    <TodoItem key={item.id} done={item.done}>
+                    <TodoItem
+                        key={item.id}
+                        done={item.done}
+                        onClick={(e) => handleClick(e, item)}
+                    >
                         {item.content}
                     </TodoItem>
                 ))}
                 {items.length > 3 && (
-                    <EtcItem>{`그 외 ${items.length - 3}`}</EtcItem>
+                    <EtcItem onClick={handleTodoStaticsModalOpen}>{`그 외 ${
+                        items.length - 3
+                    }`}</EtcItem>
                 )}
             </TodoItem>
             <EtcItem />
