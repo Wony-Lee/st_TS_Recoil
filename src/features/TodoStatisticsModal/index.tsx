@@ -72,8 +72,8 @@ const TodoStatisticsModal: React.FC = () => {
         <Modal isOpen={isOpen} onClose={handleClose}>
             <ModalBody>
                 <Card>
-                    <Date></Date>
-                    <Statistics></Statistics>
+                    <Date>2021-09-12</Date>
+                    <Statistics>할 일 0개 남음</Statistics>
                     <TodoList>
                         <TodoItem>
                             <Content></Content>
